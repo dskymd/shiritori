@@ -5,6 +5,9 @@
         <form class v-on:submit.prevent="shiritori">
           <input
             type="text"
+            v-on:change="onChange"
+            v-on:focus="onFocus"
+            v-on:blur="onBlur"
             v-model="newword"
             v-bind:placeholder="$store.state.shiri"
             class="uk-input uk-form-width-large uk-form-large"
@@ -13,15 +16,12 @@
         </form>
       </div>
 
-      <!-- <h1 class="title">nuxt-shiritori</h1>
-      <h2 class="subtitle">Nuxt.js project</h2>
-
-      <div class="links">
-        <a class="uk-button uk-button-default" href="auth">Auth</a>
-        <button class="uk-button uk-button-default">save</button>
-        <button class="uk-button uk-button-primary">GO</button>
-        <button class="uk-button uk-button-default" disabled>cancel</button>
-      </div>-->
+      <div class="history">
+        <div v-for="item in history" v-bind:key="item.wordId">
+          {{words[item.wordId][item.hash]}}
+          
+          </div>
+      </div>
     </div>
   </section>
 </template>
@@ -31,9 +31,10 @@ export default {
   components: {},
   data: () => {
     return {
-      newword: '',
-      words: Array.apply(null, { length: 45 }).map(v => []),
-      history: [],
+      charCodeA: "あ".charCodeAt(),
+      newword: "り",
+      words: Array.apply(null, { length: 145 }).map(v => []),
+      history: []
     };
   },
   created() {
@@ -42,16 +43,41 @@ export default {
     }
   },
   mounted() {
-    console.log("しりとり");
+    console.log(this.charCodeA, "しりとり");
   },
   computed: {
-    ___: function(){
-      return false
+    ___: function() {
+      return false;
     }
   },
   methods: {
     shiritori: function() {
-      console.log(this.newword)
+      console.log(this.newword);
+
+      if (this.newword.slice(0, 1) === this.$store.state.shiri) {
+        let newShiri = this.newword.slice(-1);
+        let wordId = this.newword.slice(0, 1).charCodeAt() - this.charCodeA
+
+        this.words[wordId].push(this.newword);
+        this.history.push({
+          id: this.history.length + 1,
+          num: this.words[wordId].length,
+          wordId: wordId
+        });
+        this.$store.commit("setShiri", newShiri);
+        
+        this.newword = newShiri
+
+      }
+    },
+    onFocus: function() {
+      console.log("onFocus");
+    },
+    onChange: function() {
+      console.log("onChange");
+    },
+    onBlur: function() {
+      console.log("onBlur");
     }
   }
 };
