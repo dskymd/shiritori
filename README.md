@@ -1,4 +1,4 @@
-# nuxt-shiritori
+# shiritori
 
 > Nuxt.js project
 

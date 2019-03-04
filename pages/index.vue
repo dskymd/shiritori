@@ -10,15 +10,22 @@
             v-on:blur="onBlur"
             v-model="newword"
             v-bind:placeholder="$store.state.shiri"
-            class="uk-input uk-form-width-large uk-form-large"
+            class="uk-input uk-form-width-medium uk-form-large"
           >
-          <button class="uk-button uk-button-large uk-button-primary">しりとり</button>
+          <button class="uk-button uk-button-large uk-button-primary">送信</button>
         </form>
       </div>
 
       <div class="history">
-        <div v-for="item in history" v-bind:key="item.wordId">
-          {{words[item.wordId][item.hash]}}
+        <div v-for="item in history" v-bind:key="item.id">
+       
+        {{item.wordId}}
+        /
+        {{item.id}}
+        //
+        {{item.num}}
+        //
+           {{words[item.wordId][item.num-1]}}
           
           </div>
       </div>
@@ -33,7 +40,7 @@ export default {
     return {
       charCodeA: "あ".charCodeAt(),
       newword: "り",
-      words: Array.apply(null, { length: 145 }).map(v => []),
+      words: Array.apply(null, { length: 345 }).map(v => []),
       history: []
     };
   },
