@@ -18,16 +18,14 @@
 
       <div class="history">
         <div v-for="item in history" v-bind:key="item.id">
-       
-        {{item.wordId}}
-        /
-        {{item.id}}
-        //
-        {{item.num}}
-        //
-           {{words[item.wordId][item.num-1]}}
-          
-          </div>
+          {{item.wordId}}
+          /
+          {{item.id}}
+          //
+          {{item.num}}
+          //
+          {{words[item.wordId][item.num-1]}}
+        </div>
       </div>
     </div>
   </section>
@@ -61,9 +59,10 @@ export default {
     shiritori: function() {
       console.log(this.newword);
 
-      if (this.newword.slice(0, 1) === this.$store.state.shiri) {
+      // if (this.newword.slice(0, 1) === this.$store.state.shiri) {
+      if (this.wordCheck(this.newword)) {
         let newShiri = this.newword.slice(-1);
-        let wordId = this.newword.slice(0, 1).charCodeAt() - this.charCodeA
+        let wordId = this.newword.slice(0, 1).charCodeAt() - this.charCodeA;
 
         this.words[wordId].push(this.newword);
         this.history.push({
@@ -72,11 +71,28 @@ export default {
           wordId: wordId
         });
         this.$store.commit("setShiri", newShiri);
-        
-        this.newword = newShiri
 
+        this.newword = newShiri;
       }
     },
+    //送信されたワードのチェック retutn boolean
+    wordCheck: function(word) {
+      // - 前のしりで始まる
+      // - ん で終わらない
+      //重複していない
+      //意味があるか
+      // ? 一文字以上
+
+      if (
+        this.newword.slice(0, 1) === this.$store.state.shiri &&
+        this.newword.slice(-1) != "ん"
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    //Event
     onFocus: function() {
       console.log("onFocus");
     },
